@@ -157,5 +157,34 @@ sudo iptables -L INPUT -n -v --line-numbers
 ```
 <img width="1340" height="784" alt="image" src="https://github.com/user-attachments/assets/ae7ea471-b818-4383-b96b-dcff110bc3ab" />
 
+---
+firewall (continue) - giới hạn SSH
+```
+sudo iptables -F
+sudo iptables -X
+sudo iptables -t nat -F
+sudo iptables -t mangle -F
+
+sudo iptables -P INPUT DROP
+sudo iptables -P FORWARD DROP
+sudo iptables -P OUTPUT ACCEPT
+
+# loopback + stateful
+sudo iptables -A INPUT -i lo -j ACCEPT
+sudo iptables -A INPUT   -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+sudo iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# Giới hạn SSH: quá 3 kết nối/IP -> reject
+sudo iptables -A FORWARD -d 10.10.20.10 -p tcp --dport 22 \
+  -m connlimit --connlimit-above 3 --connlimit-mask 32 \
+  -j REJECT --reject-with tcp-reset
+
+# Cho phép SSH NEW tới server
+sudo iptables -A FORWARD -d 10.10.20.10 -p tcp --dport 22 \
+-m conntrack --ctstate NEW -j ACCEPT
+```
+
+
+
 
 
