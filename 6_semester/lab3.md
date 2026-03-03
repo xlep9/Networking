@@ -1,4 +1,4 @@
-<img width="1340" height="784" alt="image" src="https://github.com/user-attachments/assets/dc9acd62-17d1-465d-84b9-1aded78904c9" />Client — Firewall — Server
+Client — Firewall — Server
 
 - Subnet Client ↔ Firewall-eth0: 10.10.10.0/24
 - Subnet Firewall-eth1 ↔ Server: 10.10.20.0/24
