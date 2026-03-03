@@ -110,10 +110,48 @@ ping 10.10.20.10
 
 <img width="1749" height="1068" alt="Screenshot from 2026-03-03 10-22-16" src="https://github.com/user-attachments/assets/d2e4153e-90d9-469b-9b52-cace05d1dab1" />
 
+---
+firewall (continue) - telnet
+
+```
+# rule hặn tất cả các kết nối TCP từ địa chỉ IP 10.10.10.10 (client) đến cổng 23 (Telnet) cua firewall
+sudo iptables -A INPUT -p tcp -s 10.10.10.10 --dport 23 -j DROP
+# Ktra
+sudo iptables -L -n -v
+# delete this rule
+sudo iptables -D INPUT -p tcp -s 10.10.10.10 --dport 23 -j DROP
+
+```
+<img width="1279" height="875" alt="image" src="https://github.com/user-attachments/assets/0e4f2447-d0b0-49b8-ae66-959919e17f3e" />
+
+---
+firewall (continue)
+
+```
+iptables -F
+iptables -X
+iptables -t nat -F
+iptables -t mangle -F
+
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+iptables -P OUTPUT ACCEPT
+
+iptables -A INPUT -i lo -j ACCEPT
+
+iptables -A INPUT   -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+sudo iptables -L -n -v
+
+# Chặn TCP “NEW nhưng không SYN”
+sudo iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
+sudo iptables -A INPUT -p tcp -m conntrack --ctstate NEW ! --syn -j DROP
+# Xem rule có vào chưa (lấy line-number để lát xem counter)
+sudo iptables -L INPUT -n -v --line-numbers
 
 
-
-
+```
 
 
 
