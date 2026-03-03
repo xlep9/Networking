@@ -174,14 +174,63 @@ sudo iptables -A INPUT -i lo -j ACCEPT
 sudo iptables -A INPUT   -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 sudo iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
-# Giới hạn SSH: quá 3 kết nối/IP -> reject
+# connlimit: chặn nếu >3 kết nối SSH đồng thời từ 1 IP tới server
 sudo iptables -A FORWARD -d 10.10.20.10 -p tcp --dport 22 \
+  -m conntrack --ctstate NEW \
   -m connlimit --connlimit-above 3 --connlimit-mask 32 \
   -j REJECT --reject-with tcp-reset
 
-# Cho phép SSH NEW tới server
+# cho phép tạo kết nối SSH mới tới server
 sudo iptables -A FORWARD -d 10.10.20.10 -p tcp --dport 22 \
--m conntrack --ctstate NEW -j ACCEPT
+  -m conntrack --ctstate NEW \
+  -j ACCEPT
+
+# xem rule
+sudo iptables -L FORWARD -n -v --line-numbers
+```
+
+Server
+```
+sudo systemctl enable ssh    # Bật tự động khởi động cùng máy
+sudo systemctl start ssh     # Khởi chạy SSH ngay lập tức
+sudo ss -lntp | grep ':22' # Ktra
+
+```
+Client
+```
+# thiết lập kết nối SSH không cần mật khẩu 
+
+#Tạo cặp khóa SSH
+ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519
+
+# Copy khóa công khai lên server
+ssh-copy-id xlep@10.10.20.10
+
+# Kiểm tra kết nối không cần mật khẩu
+ssh -o BatchMode=yes xlep@10.10.20.10 "echo OK"
+
+```
+Test
+
+- Trên Client tạo 3 kết nối giữ 300s
+```
+for i in 1 2 3; do
+  nohup ssh -n -o BatchMode=yes xlep@10.10.20.10 "sleep 300" >/dev/null 2>&1 &
+done
+sleep 2
+ss -tn | grep "10.10.20.10:22"
+```
+- Thử kết nối thứ 4 (phải fail)
+```
+ssh -o BatchMode=yes xlep@10.10.20.10 "sleep 300"
+```
+- Trên Firewall (thấy dòng REJECT (connlimit) tăng pkts/bytes.)
+```
+sudo iptables -L FORWARD -n -v --line-numbers
+```
+- Trên Client clear all
+```
+pkill -f "ssh .*sleep 300" || true
 ```
 
 
