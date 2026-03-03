@@ -1,19 +1,19 @@
-Client — Firewall — Server
+<img width="1340" height="784" alt="image" src="https://github.com/user-attachments/assets/dc9acd62-17d1-465d-84b9-1aded78904c9" />Client — Firewall — Server
 
 - Subnet Client ↔ Firewall-eth0: 10.10.10.0/24
-- Subnet Firewall-eth1 ↔ Server: 10.20.20.0/24
+- Subnet Firewall-eth1 ↔ Server: 10.10.20.0/24
 
 - Client: 10.10.10.10/24 - intnet1
 
 - Firewall
 - eth0: 10.10.10.1/24 - intnet1
-- eth1: 10.20.20.1/24 - intnet2
+- eth1: 10.10.20.1/24 - intnet2
 
-- Server: 10.20.20.10/24 - intnet2
+- Server: 10.10.20.10/24 - intnet2
 
 - Gateway:
 - Client default gateway → 10.10.10.1
-- Server default gateway → 10.20.20.1
+- Server default gateway → 10.10.20.1
 
 ---
 ip a
@@ -125,7 +125,7 @@ sudo iptables -D INPUT -p tcp -s 10.10.10.10 --dport 23 -j DROP
 <img width="1279" height="875" alt="image" src="https://github.com/user-attachments/assets/0e4f2447-d0b0-49b8-ae66-959919e17f3e" />
 
 ---
-firewall (continue)
+firewall (continue) - chặn TCP “NEW nhưng không SYN”
 
 ```
 iptables -F
@@ -144,14 +144,18 @@ iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
 sudo iptables -L -n -v
 
+# ALLOW client connect to firewall
+iptables -A INPUT -s 10.10.10.10 -j ACCEPT
+
 # Chặn TCP “NEW nhưng không SYN”
 sudo iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
 sudo iptables -A INPUT -p tcp -m conntrack --ctstate NEW ! --syn -j DROP
+
 # Xem rule có vào chưa (lấy line-number để lát xem counter)
 sudo iptables -L INPUT -n -v --line-numbers
 
-
 ```
+<img width="1340" height="784" alt="image" src="https://github.com/user-attachments/assets/ae7ea471-b818-4383-b96b-dcff110bc3ab" />
 
 
 
