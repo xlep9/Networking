@@ -43,10 +43,10 @@ sudo sysctl --system
 sysctl net.ipv4.ip_forward
 
 # Reset iptables
-iptables -F
-iptables -X
-iptables -t nat -F
-iptables -t mangle -F
+sudo iptables -F
+sudo iptables -X
+sudo iptables -t nat -F
+sudo iptables -t mangle -F
 
 # policy mặc định
 sudo iptables -P INPUT ACCEPT
