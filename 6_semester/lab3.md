@@ -35,9 +35,24 @@ network:
 
 sudo netplan apply
 
-sudo sysctl -w net.ipv4.ip_forward=1
+# Bật vĩnh viễn (sau reboot vẫn là 1)
+echo "net.ipv4.ip_forward=1" | sudo tee /etc/sysctl.d/99-ipforward.conf
+sudo sysctl --system
 
-cat /proc/sys/net/ipv4/ip_forward # result: 1
+# Ktra
+sysctl net.ipv4.ip_forward
+
+# Reset iptables
+iptables -F
+iptables -X
+iptables -t nat -F
+iptables -t mangle -F
+
+# policy mặc định
+sudo iptables -P INPUT ACCEPT
+sudo iptables -P FORWARD ACCEPT
+sudo iptables -P OUTPUT ACCEPT
+
 
 ```
 ---
@@ -82,15 +97,18 @@ KT
 ```
 # client ping firewall:
 
-ping -c 2 10.10.10.1
+ping 10.10.10.1
 
 # server ping firewall:
 
-ping -c 2 10.10.20.1
+ping 10.10.20.1
+
+# client ping server
+ping 10.10.20.10
 
 ```
 
-
+<img width="1749" height="1068" alt="Screenshot from 2026-03-03 10-22-16" src="https://github.com/user-attachments/assets/d2e4153e-90d9-469b-9b52-cace05d1dab1" />
 
 
 
