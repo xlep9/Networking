@@ -42,6 +42,7 @@ sysctl net.ipv4.ip_forward
 # Reset iptables
 sudo iptables -F
 sudo iptables -X
+sudo iptables -Z # pkts
 sudo iptables -t nat -F
 sudo iptables -t mangle -F
 
