@@ -42,7 +42,6 @@ sysctl net.ipv4.ip_forward
 # Reset iptables
 sudo iptables -F
 sudo iptables -X
-sudo iptables -Z # pkts
 sudo iptables -t nat -F
 sudo iptables -t mangle -F
 
@@ -56,7 +55,10 @@ iptables -A INPUT -i lo -j ACCEPT
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
-
+# Reset counters (pkts/bytes)
+sudo iptables -Z INPUT
+sudo iptables -Z OUTPUT
+sudo iptables -Z FORWARD
 ```
 ---
 Server
