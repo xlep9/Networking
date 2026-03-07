@@ -135,8 +135,6 @@ sudo iptables -L -n -v
 # thấy số packet đã match rule (pkts) tăng lên
 ```
 
-<img width="1279" height="875" alt="image" src="https://github.com/user-attachments/assets/0e4f2447-d0b0-49b8-ae66-959919e17f3e" />
-
 ---
 ## 2. Установить блокировку для входящих запросов TCP не открывающих новое соединение и не принадлежащих никакому из установленных соединений
 
