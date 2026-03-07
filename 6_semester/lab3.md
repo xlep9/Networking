@@ -95,23 +95,6 @@ network:
 sudo netplan apply
 
 ```
----
-Ktra
-```
-# client ping firewall:
-
-ping 10.10.10.1
-
-# server ping firewall:
-
-ping 10.10.20.1
-
-# client ping server
-ping 10.10.20.10
-
-```
-
-<img width="1749" height="1068" alt="Screenshot from 2026-03-03 10-22-16" src="https://github.com/user-attachments/assets/d2e4153e-90d9-469b-9b52-cace05d1dab1" />
 
 ---
 ## 1. Заблокировать все входящие Telnet-соединения с адреса 10.10.10.10
