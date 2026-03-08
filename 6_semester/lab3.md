@@ -224,9 +224,10 @@ firewall (continue)
 
 ```
 # cho phép 1 gói ping mỗi giây
-iptables -A FORWARD -p icmp --icmp-type echo-request -m limit --limit 1/second -j ACCEPT
+sudo iptables -A FORWARD -p icmp --icmp-type echo-request -m limit --limit 1/second -j ACCEPT
+
 # vượt quá giới hạn sẽ bị drop
-iptables -A FORWARD -p icmp --icmp-type echo-request -j DROP
+sudo iptables -A FORWARD -p icmp --icmp-type echo-request -j DROP
 ```
 Từ client
 ```
@@ -238,7 +239,6 @@ ping -i 0.2 10.10.20.10
 
 # Kiểm tra packet bị drop trên server (xem cột pkts)
 sudo iptables -L -v -n
-
 ```
 
 
