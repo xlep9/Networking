@@ -136,13 +136,20 @@ ss -tnp | grep :23 | grep ESTAB
 
 firewall (continue)
 ```
-
 sudo iptables -I FORWARD 1 -m conntrack --ctstate INVALID -j DROP
 sudo iptables -I FORWARD 2 -p tcp -m conntrack --ctstate NEW ! --syn -j DROP
 
-
-
 ```
+Client 
+```
+# test INVALID
+sudo hping3 -c 5 -FPU -p 23 10.10.20.10
+
+# test NEW
+sudo hping3 -c 5 -A -p 23 10.10.20.10
+```
+
+
 <img width="1340" height="784" alt="image" src="https://github.com/user-attachments/assets/ae7ea471-b818-4383-b96b-dcff110bc3ab" />
 
 ---
