@@ -108,10 +108,11 @@ firewall (continue)
 sudo iptables -A INPUT -p tcp --dport 23 -j ACCEPT
 
 # Заблокировать отдельный IP 10.10.10.10
-sudo iptables -A FORWARD -s 10.10.10.10 -d 10.10.20.10 -j DROP
+sudo iptables -A FORWARD -s 10.10.10.10 -d 10.10.20.10 -p tcp --dport 23 -j DROP
 
-# Разрешить весь оставшийся подсет
-sudo iptables -A FORWARD -s 10.10.10.0/24 -d 10.10.20.10 -j ACCEPT
+# Разрешить IP 10.10.10.11
+sudo iptables -A FORWARD -s 10.10.10.11 -d 10.10.20.10 -p tcp --dport 23 -j ACCEPT
+
 
 ```
 CLient 
