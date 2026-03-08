@@ -149,9 +149,6 @@ sudo hping3 -c 5 -FPU -p 23 10.10.20.10
 sudo hping3 -c 5 -A -p 23 10.10.20.10
 ```
 
-
-<img width="1340" height="784" alt="image" src="https://github.com/user-attachments/assets/ae7ea471-b818-4383-b96b-dcff110bc3ab" />
-
 ---
 ## 3. Ограничить количество параллельных соединений к серверу SSH для одного адреса - не более 3 соединений одновременно
 
