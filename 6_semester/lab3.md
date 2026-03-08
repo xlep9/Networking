@@ -210,7 +210,7 @@ ssh -o BatchMode=yes xlep@10.10.20.10 "sleep 300"
 ```
 - Trên Firewall (thấy dòng REJECT (connlimit) tăng pkts/bytes.)
 ```
-sudo iptables -L FORWARD -n -v --line-numbers
+sudo iptables -L -n -v
 ```
 - Trên Client clear all
 ```
@@ -224,17 +224,17 @@ firewall (continue)
 
 ```
 # cho phép 1 gói ping mỗi giây
-iptables -A INPUT -p icmp --icmp-type echo-request -m limit --limit 1/second -j ACCEPT
+iptables -A FORWARD -p icmp --icmp-type echo-request -m limit --limit 1/second -j ACCEPT
 # vượt quá giới hạn sẽ bị drop
-iptables -A INPUT -p icmp --icmp-type echo-request -j DROP
+iptables -A FORWARD -p icmp --icmp-type echo-request -j DROP
 ```
 Từ client
 ```
 # Vì ping mặc định 1 giây / 1 lần, nên tất cả đều được accept.
-ping 10.10.10.1
+ping 10.10.20.10
 
 # gửi 5 ping mỗi giây nên chỉ 1 ping/giây được trả lời các ping khác bị DROP
-ping -i 0.2 192.168.1.10
+ping -i 0.2 10.10.20.10
 
 # Kiểm tra packet bị drop trên server (xem cột pkts)
 sudo iptables -L -v -n
