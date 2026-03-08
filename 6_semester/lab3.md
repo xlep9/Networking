@@ -137,13 +137,10 @@ ss -tnp | grep :23 | grep ESTAB
 firewall (continue)
 ```
 
-# Chặn TCP “NEW nhưng không SYN”
-sudo iptables -A FORWARD -m conntrack --ctstate INVALID -j DROP
-sudo iptables -A FORWARD -p tcp -m conntrack --ctstate NEW ! --syn -j DROP
+sudo iptables -I FORWARD 1 -m conntrack --ctstate INVALID -j DROP
+sudo iptables -I FORWARD 2 -p tcp -m conntrack --ctstate NEW ! --syn -j DROP
 
 
-# Xem rule có vào chưa (lấy line-number để lát xem counter)
-sudo iptables -L INPUT -n -v --line-numbers
 
 ```
 <img width="1340" height="784" alt="image" src="https://github.com/user-attachments/assets/ae7ea471-b818-4383-b96b-dcff110bc3ab" />
