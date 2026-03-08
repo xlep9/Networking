@@ -249,6 +249,10 @@ sudo iptables -Z FORWARD 1
 
 # delete rule
 sudo iptables -D FORWARD 3
+
+# xem table iptables
+sudo iptables -L -n -v
+
 ```
 
 
