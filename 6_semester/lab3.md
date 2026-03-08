@@ -104,18 +104,14 @@ firewall (continue)
 
 ```
 
-# allow telnet from others
-iptables -A INPUT -p tcp --dport 23 -j ACCEPT
+#В начале разрешаем Telnet (порт 23) для всех источников на firewall
+sudo iptables -A INPUT -p tcp --dport 23 -j ACCEPT
 
-# block telnet from specific IP (10.10.10.10) на сервер
-iptables -A FORWARD -p tcp -s 10.10.10.10 --dport 23 -j DROP
+# Заблокировать отдельный IP 10.10.10.10
+sudo iptables -A FORWARD -s 10.10.10.10 -d 10.10.20.10 -j DROP
 
-
-# Ktra
-sudo iptables -L -n -v
-
-# Kiểm tra Telnet server đang chạy
-ss -tlnp | grep 23
+# Разрешить весь оставшийся подсет
+sudo iptables -A FORWARD -s 10.10.10.0/24 -d 10.10.20.10 -j ACCEPT
 
 ```
 CLient 
@@ -125,9 +121,6 @@ telnet 10.10.10.1 23 # Trying 10.10.10.1...
 
 # Test từ máy khác 10.10.10.11
 telnet 10.10.10.1 23 # Connected to 10.10.10.1
-
-# Test nhanh bằng nmap
-nmap -p 23 SERVER_IP
 
 ```
 
