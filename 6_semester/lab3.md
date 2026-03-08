@@ -103,10 +103,6 @@ sudo netplan apply
 firewall (continue)
 
 ```
-
-# В начале разрешаем Telnet (порт 23) для всех источников на firewall
-sudo iptables -A INPUT -p tcp --dport 23 -j ACCEPT
-
 # Заблокировать отдельный IP 10.10.10.10
 sudo iptables -A FORWARD -s 10.10.10.10 -d 10.10.20.10 -p tcp --dport 23 -j DROP
 
