@@ -51,9 +51,9 @@ sudo iptables -P FORWARD DROP
 sudo iptables -P OUTPUT ACCEPT
 
 # cho phép các gói tin thuộc các kết nối đã được thiết lập hoặc liên quan đi qua
-iptables -A INPUT -i lo -j ACCEPT
-iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+sudo iptables -A INPUT -i lo -j ACCEPT
+sudo iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+sudo iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
 # Reset counters (pkts/bytes)
 sudo iptables -Z INPUT
