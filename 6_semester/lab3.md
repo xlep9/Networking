@@ -103,11 +103,13 @@ sudo netplan apply
 firewall (continue)
 
 ```
-# block telnet from specific IP (10.10.10.10)
-iptables -A INPUT -p tcp -s 10.10.10.10 --dport 23 -j DROP
 
 # allow telnet from others
 iptables -A INPUT -p tcp --dport 23 -j ACCEPT
+
+# block telnet from specific IP (10.10.10.10) на сервер
+iptables -A FORWARD -p tcp -s 10.10.10.10 --dport 23 -j DROP
+
 
 # Ktra
 sudo iptables -L -n -v
@@ -134,19 +136,20 @@ firewall (Kiểm tra counter rule)
 sudo iptables -L -n -v
 # thấy số packet đã match rule (pkts) tăng lên
 ```
+Server
 
 ---
 ## 2. Установить блокировку для входящих запросов TCP не открывающих новое соединение и не принадлежащих никакому из установленных соединений
 
 firewall (continue)
 ```
-
-# Chặn TCP “NEW nhưng không SYN”
-sudo iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
-sudo iptables -A INPUT -p tcp -m conntrack --ctstate NEW ! --syn -j DROP
-
 # ALLOW client connect to firewall
 iptables -A INPUT -s 10.10.10.10 -j ACCEPT
+
+# Chặn TCP “NEW nhưng không SYN”
+sudo iptables -A FORWARD -m conntrack --ctstate INVALID -j DROP
+sudo iptables -A FORWARD -p tcp -m conntrack --ctstate NEW ! --syn -j DROP
+
 
 # Xem rule có vào chưa (lấy line-number để lát xem counter)
 sudo iptables -L INPUT -n -v --line-numbers
