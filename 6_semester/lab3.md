@@ -104,7 +104,7 @@ firewall (continue)
 
 ```
 
-#В начале разрешаем Telnet (порт 23) для всех источников на firewall
+# В начале разрешаем Telnet (порт 23) для всех источников на firewall
 sudo iptables -A INPUT -p tcp --dport 23 -j ACCEPT
 
 # Заблокировать отдельный IP 10.10.10.10
@@ -130,7 +130,10 @@ sudo iptables -L -n -v
 # thấy số packet đã match rule (pkts) tăng lên
 ```
 Server
-
+```
+# Xem tất cả kết nối TCP đang hoạt động đến port 23
+ss -tnp | grep :23 | grep ESTAB
+```
 ---
 ## 2. Установить блокировку для входящих запросов TCP не открывающих новое соединение и не принадлежащих никакому из установленных соединений
 
