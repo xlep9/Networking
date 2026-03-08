@@ -136,8 +136,6 @@ ss -tnp | grep :23 | grep ESTAB
 
 firewall (continue)
 ```
-# ALLOW client connect to firewall
-iptables -A INPUT -s 10.10.10.10 -j ACCEPT
 
 # Chặn TCP “NEW nhưng không SYN”
 sudo iptables -A FORWARD -m conntrack --ctstate INVALID -j DROP
