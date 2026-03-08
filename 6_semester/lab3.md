@@ -246,6 +246,9 @@ sudo iptables -L FORWARD --line-numbers
 
 # Reset riêng từng rule
 sudo iptables -Z FORWARD 1
+
+# delete rule
+sudo iptables -D FORWARD 3
 ```
 
 
