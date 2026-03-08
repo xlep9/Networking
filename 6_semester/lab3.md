@@ -240,9 +240,10 @@ ping -i 0.2 10.10.20.10
 # Kiểm tra packet bị drop trên server (xem cột pkts)
 sudo iptables -L -v -n
 ```
+---
+```
+sudo iptables -L FORWARD --line-numbers
 
-
-
-
+```
 
 
