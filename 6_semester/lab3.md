@@ -223,16 +223,17 @@ pkill -f "ssh .*sleep 300" || true
 firewall (continue)
 
 ```
-# cho phép 1 gói ping mỗi giây
-sudo iptables -A FORWARD -p icmp --icmp-type echo-request -m limit --limit 1/second -j ACCEPT
+# разрешить 1 ping-пакет в секунду
+sudo iptables -I FORWARD 1 -p icmp --icmp-type echo-request -m limit --limit 1/second -j ACCEPT
 
-# vượt quá giới hạn sẽ bị drop
-sudo iptables -A FORWARD -p icmp --icmp-type echo-request -j DROP
+# превышение лимита будет сбрасываться (DROP)
+sudo iptables -I FORWARD 2 -p icmp --icmp-type echo-request -j DROP
+
 ```
 Từ client
 ```
 # Vì ping mặc định 1 giây / 1 lần, nên tất cả đều được accept.
-ping 10.10.20.10
+ping -c 5 10.10.20.10
 
 # gửi 5 ping mỗi giây nên chỉ 1 ping/giây được trả lời các ping khác bị DROP
 ping -i 0.2 10.10.20.10
