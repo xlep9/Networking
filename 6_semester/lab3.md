@@ -114,10 +114,10 @@ sudo iptables -A FORWARD -s 10.10.10.11 -d 10.10.20.10 -p tcp --dport 23 -j ACCE
 CLient 
 ```
 # Test từ máy 10.10.10.10
-telnet 10.10.10.1 23 # Trying 10.10.10.1...
+telnet 10.10.20.10 23 
 
 # Test từ máy khác 10.10.10.11
-telnet 10.10.10.1 23 # Connected to 10.10.10.1
+telnet 10.10.20.10 23 
 
 ```
 
