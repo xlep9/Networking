@@ -1,7 +1,9 @@
-https://ru.scribd.com/document/463089114/wifi-hacking
+1. https://ru.scribd.com/document/463089114/wifi-hacking
 
-https://habr.com/ru/articles/464503/
+1. https://habr.com/ru/articles/464503/
 
-https://habr.com/ru/companies/ruvds/articles/534112/
+1. https://habr.com/ru/companies/ruvds/articles/534112/
 
-https://habr.com/ru/companies/alexhost/articles/536490/
+1. https://promwad.com/case-studies/access-point-vulnerability-scanning
+
+2. https://habr.com/ru/companies/alexhost/articles/536490/
