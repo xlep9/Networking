@@ -7,3 +7,11 @@
 1. https://promwad.com/case-studies/access-point-vulnerability-scanning (1)
 
 2. https://habr.com/ru/companies/alexhost/articles/536490/ (2)
+
+which airmon-ng
+
+which airodump-ng
+
+which crunch
+
+which aircrack-ng
