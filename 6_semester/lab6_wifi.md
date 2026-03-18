@@ -8,6 +8,8 @@
 
 2. https://habr.com/ru/companies/alexhost/articles/536490/ (2)
 
+3. https://github.com/victorpreston/bruteX (3)
+
 which airmon-ng
 
 which airodump-ng
