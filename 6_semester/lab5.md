@@ -1,0 +1,19 @@
+<img width="763" height="1028" alt="image" src="https://github.com/user-attachments/assets/7fdc970a-b488-4c3a-8784-2fdc27ca48ad" />
+
+1. kiểm tra trong máy mình trước, không hỏi DNS ngay lập tức, mà thường kiểm tra theo thứ tự:
+- Trình duyệt cache: trước đó đã từng vào trang này chưa
+- DNS cache của hệ điều hành
+- File hosts: nếu trong máy có khai báo tên miền trỏ sẵn tới IP
+
+2. Nếu trong máy không có, client sẽ gửi câu hỏi DNS đến DNS resolver đã được cấu hình sẵn.
+Resolver này có thể là:
+- DNS của router/gateway
+- DNS nội bộ trong công ty/lab
+- DNS công cộng như 8.8.8.8, 1.1.1.1
+
+3. Resolver kiểm tra cache của nó, Nếu còn trong cache, resolver trả lời ngay cho client.
+4. Nếu resolver chưa biết, nó đi hỏi tiếp
+- Hỏi root DNS server: root server trả về địa chỉ (a.gtld-servers.net -> 192.5.6.30) các TLD (Top-Level Domain) server ( It manages domain name suffixes like .com, .org, ...).
+- Hỏi TLD server: trả về địa chỉ (ns1.example.net) authoritative name server (Máy chủ tên miền có thẩm quyền) của example.com
+- Hỏi authoritative DNS server: Resolver hỏi authoritative server của example.com (ns1.example.net), Authoritative trả:
+www.example.com A 93.184.216.34 (bản ghi cuối cùng mà resolver đang cần)
