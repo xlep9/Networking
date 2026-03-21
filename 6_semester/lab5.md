@@ -17,3 +17,13 @@ Resolver này có thể là:
 - Hỏi TLD server: trả về địa chỉ (ns1.example.net) authoritative name server (Máy chủ tên miền có thẩm quyền) của example.com
 - Hỏi authoritative DNS server: Resolver hỏi authoritative server của example.com (ns1.example.net), Authoritative trả:
 www.example.com A 93.184.216.34 (bản ghi cuối cùng mà resolver đang cần)
+
+---
+- NS record = hỏi ai quản lý
+- A/AAAA record = hỏi IP là gì
+
+tóm lại là: 
+
+- root trả: NS của .com, IP của các NS đó
+- TLD trả: NS của example.com và IP của các NS đó
+- Authoritative trả:www.example.com A 93.184.216.34. Tức là authoritative trả: bản ghi cuối cùng mà resolver đang cần
