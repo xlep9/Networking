@@ -26,4 +26,48 @@ tóm lại là:
 
 - root trả: NS của .com, IP của các NS đó
 - TLD trả: NS của example.com và IP của các NS đó
-- Authoritative trả:www.example.com A 93.184.216.34. Tức là authoritative trả: bản ghi cuối cùng mà resolver đang cần
+- Authoritative trả: www.example.com A 93.184.216.34. Tức là authoritative trả: bản ghi cuối cùng mà resolver đang cần
+
+---
+## SRV12 
+là secondary (slave) DNS server dùng để dự phòng và đồng bộ dữ liệu từ SRV11, nhằm đảm bảo hệ thống DNS luôn hoạt động khi SRV11 gặp sự cố và tăng độ tin cậy của hệ thống.
+
+---
+## File zone là gì?
+- là “sổ dữ liệu” của một zone
+- Ví dụ zone lab.test có thể có file:
+```
+$TTL 604800
+@   IN  SOA srv11.lab.test. admin.lab.test. (
+        2026032201
+        604800
+        86400
+        2419200
+        604800 )
+
+@       IN  NS  srv11.lab.test.
+@       IN  NS  srv12.lab.test.
+
+srv11   IN  A   192.168.56.101
+srv12   IN  A   192.168.56.102
+srv2    IN  A   192.168.56.103
+
+my      IN  NS  srv2.lab.test.
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
