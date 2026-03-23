@@ -36,24 +36,54 @@ là secondary (slave) DNS server dùng để dự phòng và đồng bộ dữ l
 ## File zone là gì?
 - là “sổ dữ liệu” của một zone
 - Ví dụ zone lab.test có thể có file:
+---
+SRV1 làm recursive resolver cho client nội bộ, làm authoritative DNS cho zone lab.test
 ```
-$TTL 604800
-@   IN  SOA srv11.lab.test. admin.lab.test. (
-        2026032201
-        604800
-        86400
-        2419200
-        604800 )
+# /etc/bind/named.conf.options - các máy trong ds này được phép hỏi đệ quy
 
-@       IN  NS  srv11.lab.test.
-@       IN  NS  srv12.lab.test.
+acl "trusted" {
+        192.168.56.101;    # srv1
+        192.168.56.102;    # srv2
+        192.168.56.1;  # client
+};
 
-srv11   IN  A   192.168.56.101
-srv12   IN  A   192.168.56.102
-srv2    IN  A   192.168.56.103
+options {
+        directory "/var/cache/bind";
+        recursion yes; # разрешаем рекурсивные запросы
+        allow-recursion { trusted; }; # разрешаем рекурсивные запросы только от доверенных клиентов
+        listen-on { 192.168.56.101; }; # приватный адрес SRV1, на котором будет работать сервис DNS
+        allow-transfer { none; }; # запрет переноса зоны
+        forwarders {
+                8.8.8.8;
+                8.8.4.4;
+        }; # перенаправление запросов, неизвестных серверу на Google DNS
+};
 
-my      IN  NS  srv2.lab.test.
+# /etc/bind/named.conf.local - khởi tạo một zone tên là lab.
+
+zone "lab.test" {
+    type master;
+    file "/etc/bind/zones/db.lab.test"; # путь к файлу зоны
+};
+
+#  /etc/bind/zones/db.lab.test - ghi vào file đã khai báo zone bên trên
+
+$TTL    604800
+@       IN      SOA     srv1.lab.test. admin.lab.test. (
+                  3     ; Serial
+             604800     ; Refresh
+              86400     ; Retry
+            2419200     ; Expire
+             604800 )   ; Negative Cache TTL
+
+     IN      NS      srv1.lab.test. ; NS - name server, khai báo rằng srv1.lab.test là máy chủ DNS chịu trách nhiệm cho zone lab.test
+
+srv1.lab.test.        IN      A      192.168.56.101 ; khai báo rằng tên miền srv1.lab.test trỏ đến địa chỉ IP 192.168.56.101
+srv2.lab.test.        IN      A      192.168.56.102 
+
 ```
+
+
 
 
 
