@@ -36,6 +36,48 @@ là secondary (slave) DNS server dùng để dự phòng và đồng bộ dữ l
 ## File zone là gì?
 - là “sổ dữ liệu” của một zone
 - Ví dụ zone lab.test có thể có file:
+
+---
+Client
+```
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s8:
+      dhcp4: false
+      addresses:
+        - 192.168.56.1/24
+      nameservers:
+        addresses:
+          - 192.168.56.101   # SRV1
+
+```
+SRV1
+```
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s3:   # NAT
+      dhcp4: true
+
+    enp0s8:   # Host-only
+      dhcp4: false
+      addresses:
+        - 192.168.56.101/24
+```
+SRV2
+```
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s8:
+      dhcp4: false
+      addresses:
+        - 192.168.56.102/24
+```
 ---
 SRV1 làm recursive resolver cho client nội bộ, làm authoritative DNS cho zone lab.test
 ```
