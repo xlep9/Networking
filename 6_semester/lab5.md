@@ -82,11 +82,77 @@ srv1.lab.test.        IN      A      192.168.56.101 ; khai báo rằng tên mi�
 srv2.lab.test.        IN      A      192.168.56.102 
 
 ```
+---
+SRV2 - DNS phụ (my.lab.test + DNSSEC) - Muốn hỏi về domain my.lab.test thì hãy hỏi server srv2.lab.test
+```
+# Tạo zone my.lab.test (SRV2)
 
+# khai bao
+# sudo nano /etc/bind/named.conf.local
+zone "my.lab.test" {
+    type master;
+    file "/etc/bind/zones/db.my.lab.test";
+};
 
+# File zone
+# sudo nano /etc/bind/zones/db.my.lab.test
+$TTL 604800
+@   IN  SOA srv2.my.lab.test. admin.my.lab.test. (
+        3
+        604800
+        86400
+        2419200
+        604800
+)
 
+    IN  NS  srv2.lab.test.
 
+srv2.lab.test. IN A 192.168.56.102 ; Server DNS srv2.lab.test nằm ở IP 192.168.56.102
+; Delegation for my.lab.test (Uỷ quyền cho SRV2)
+my.lab.test.     IN      NS      srv2.lab.test. ; Muốn biết thông tin của my.lab.test thì hãy hỏi server srv2.lab.test
+```
+---
+Cấu hình DNSSEC (trên SRV2)
 
+```
+# Tạo thư mục key
+sudo mkdir -p /etc/bind/keys
+cd /etc/bind/keys
+
+# Tạo KSK
+dnssec-keygen -f KSK -a RSASHA1 -b 2048 -n ZONE my.lab.test
+# Tạo ZSK
+dnssec-keygen -a RSASHA1 -b 2048 -n ZONE my.lab.test
+# Chèn key vào zone
+cat Kmy.lab.test*.key >> /etc/bind/zones/db.my.lab.test
+# Ký zone
+cd /etc/bind/zones
+dnssec-signzone -o my.lab.test -e +3mo -N INCREMENT -K /etc/bind/keys db.my.lab.test
+# Bật DNSSEC
+sudo nano /etc/bind/named.conf.options
+dnssec-enable yes;
+dnssec-validation yes;
+dnssec-lookaside auto;
+# Trỏ sang file signed
+zone "my.lab.test" {
+    type master;
+    file "/etc/bind/zones/db.my.lab.test.signed";
+};
+# Thêm DS record vào SRV1
+cat /etc/bind/zones/dsset-my.lab.test
+# Copy nội dung → dán vào zone lab.test trên SRV1
+sudo nano /etc/bind/zones/db.lab.test
+# Restart dịch vụ
+sudo systemctl restart bind9
+```
+```
+Trên CLIENT
+Test domain
+dig @192.168.56.101 srv1.lab.test
+dig @192.168.56.102 www.my.lab.test
+Test DNSSEC
+dig my.lab.test +dnssec
+```
 
 
 
