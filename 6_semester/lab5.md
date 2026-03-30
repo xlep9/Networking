@@ -195,8 +195,22 @@ dig @192.168.56.102 www.my.lab.test
 Test DNSSEC
 dig my.lab.test +dnssec
 ```
-
-
+---
+## DNSSEC
+- private key = dùng để ký
+- public key = dùng để kiểm tra chữ ký
+- RRSIG = chữ ký
+- DNSKEY = nơi công bố public key của zone
+- ZSK (Zone Signing Key - Khóa ký Zone): Một cặp khóa (Public/Private) được dùng để ký lên các RRSET dữ liệu thông thường (như bản ghi A, MX, CNAME) trong một Zone
+- KSK (Key Signing Key - Khóa ký khóa): Một cặp khóa (Public/Private) có mức độ tin cậy cao hơn. Nhiệm vụ chính của KSK là ký lên bản ghi DNSKEY (chứa ZSK).
+- RRSET là tập hợp các bản ghi có cùng:
+cùng tên,
+cùng loại,
+cùng class,
+ví dụ: lab.test.   IN NS   srv11.lab.test.
+lab.test.   IN NS   srv12.lab.test. Chúng hợp lại thành một RRSET NS của lab.test
+chain of trust = chuỗi “ai xác nhận ai” để resolver dám tin dữ liệu cuối cùng
+- RRSIG (Resource Record Signature - Chữ ký bản ghi): Đây là chữ ký số của một RRSET, được tạo ra bởi Private Key của ZSK. RRSIG cho trình phân giải (Resolver) biết bản ghi này là "thật", không bị thay đổi.
 
 
 
