@@ -72,14 +72,42 @@ sudo dnssec-keygen -f KSK -a RSASHA256 -b 2048 -n ZONE my.lab.test
 # Liệt kê các key đã tạo
 ls Kmy.lab.test*.key
 ```
+- Tạo file zone tạm có chứa DNSKEY records
+```
+sudo bash -c 'cat > /tmp/db.my.lab.test.withkeys << "EOF"
+$TTL 604800
+@   IN  SOA srv2.lab.test. admin.lab.test. (
+        2026032903  ; Serial (tăng lên 03)
+        604800
+        86400
+        2419200
+        604800
+)
+
+; DNSKEY records - ZSK (flag 256) and KSK (flag 257)
+$INCLUDE /etc/bind/keys/Kmy.lab.test.+008+00669.key
+$INCLUDE /etc/bind/keys/Kmy.lab.test.+008+29947.key
+
+; NS record
+@   IN  NS  srv2.lab.test.
+
+; A records
+www IN  A   192.168.56.150
+app IN  A   192.168.56.151
+mail IN A   192.168.56.152
+EOF'
+```
 - Ký zone con
 ```
-sudo dnssec-signzone -o my.lab.test \
+cd /etc/bind/keys
+sudo dnssec-signzone -S \
+    -o my.lab.test \
     -f /etc/bind/zones/db.my.lab.test.signed \
     -N INCREMENT \
-    -K /etc/bind/keys \
+    -k Kmy.lab.test.+008+29947.key \
     /etc/bind/zones/db.my.lab.test \
-    /etc/bind/keys/Kmy.lab.test*.key
+    Kmy.lab.test.+008+00669.key
+# Option -S sẽ tự động thêm DNSKEY records vào zone
 ```
 - Chuyển BIND sang dùng file đã ký
 ```
