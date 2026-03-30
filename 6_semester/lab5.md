@@ -201,7 +201,7 @@ dig my.lab.test +dnssec
 - public key = dùng để kiểm tra chữ ký
 - DNSKEY: chứa public key của zone (chứa public ZSK và public KSK)
 - ZSK (Zone Signing Key - Khóa ký Zone): Một cặp khóa (Public/Private) được dùng để ký lên các RRSET dữ liệu thông thường (như bản ghi A, MX, CNAME) trong một Zone
-- KSK (Key Signing Key - Khóa ký khóa): Một cặp khóa (Public/Private) có mức độ tin cậy cao hơn. Nhiệm vụ chính của KSK là ký lên bản ghi DNSKEY (chứa ZSK).
+- KSK (Key Signing Key - Khóa ký khóa): Một cặp khóa (Public/Private). Nhiệm vụ chính của KSK là ký lên bản ghi DNSKEY (chứa ZSK).
 - RRSET là tập hợp các bản ghi có cùng:
 cùng tên,
 cùng loại,
