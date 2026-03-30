@@ -210,7 +210,7 @@ ví dụ: lab.test.   IN NS   srv11.lab.test.
 lab.test.   IN NS   srv12.lab.test. Chúng hợp lại thành một RRSET NS của lab.test
 chain of trust = chuỗi “ai xác nhận ai” để resolver dám tin dữ liệu cuối cùng
 - RRSIG (Resource Record Signature - Chữ ký bản ghi): Đây là chữ ký số của một RRSET, được tạo ra bởi Private Key của ZSK. RRSIG cho trình phân giải (Resolver) biết bản ghi này là "thật", không bị thay đổi.
-
+- DS chứa một giá trị băm của public key của zone con.
 
 
 
